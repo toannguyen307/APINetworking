@@ -18,6 +18,7 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.showcase.Contact;
@@ -100,10 +101,8 @@ public class PostFragment extends Fragment implements OnItemListener, Contact.IV
     public void showLoading() {
        progress = new ProgressDialog(getContext());
        progress.setMessage("Please wait...");
-       progress.setMax(100);
        progress.setCancelable(true);
        progress.show();
-
     }
 
     @Override

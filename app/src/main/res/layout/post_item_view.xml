@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="TextView"
+        android:text="Title"
         android:textSize="16dp"
         android:textStyle="bold" />
 
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="13dp"
-            android:text="TextView" />
+            android:text="ID" />
 
         <TextView
             android:id="@+id/tvUserId"
@@ -36,6 +36,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="13dp"
-            android:text="TextView" />
+            android:text="UserID" />
     </LinearLayout>
 </LinearLayout>

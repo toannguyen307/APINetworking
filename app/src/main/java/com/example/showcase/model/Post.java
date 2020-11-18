@@ -3,10 +3,17 @@ package com.example.showcase.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Post implements Parcelable {
+
+    @SerializedName("id")
     private int id;
+    @SerializedName("userId")
     private int userId;
+    @SerializedName("title")
     private String title;
+    @SerializedName("body")
     private String body;
 
     public Post(int id, int userId, String title, String body) {
