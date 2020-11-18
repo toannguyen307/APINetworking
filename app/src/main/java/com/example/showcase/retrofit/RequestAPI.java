@@ -1,4 +1,6 @@
-package com.example.showcase.model;
+package com.example.showcase.retrofit;
+
+import com.example.showcase.model.Post;
 
 import java.util.List;
 import retrofit2.Call;

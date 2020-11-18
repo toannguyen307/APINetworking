@@ -2,9 +2,9 @@ package com.example.showcase.presenter;
 
 
 import com.example.showcase.Contact;
-import com.example.showcase.model.APIManager;
+import com.example.showcase.retrofit.APIManager;
 import com.example.showcase.model.Post;
-import com.example.showcase.model.RequestAPI;
+import com.example.showcase.retrofit.RequestAPI;
 
 import java.util.List;
 

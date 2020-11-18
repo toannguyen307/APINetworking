@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,18 +34,21 @@ import com.example.showcase.view.DetailPostFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostFragment extends Fragment implements OnItemListener, Contact.IView {
+public class PostFragment extends Fragment implements OnItemListener, Contact.IView, SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView recyclerViewPost;
     private List<Post> postLists = new ArrayList<>();
     private Presenter presenter;
     private PostAdapter adapter;
     private ProgressDialog progress;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        presenter = new Presenter(this);
+        if (presenter == null) {
+            presenter = new Presenter(this);
+        }
     }
 
     @Override
@@ -63,9 +68,12 @@ public class PostFragment extends Fragment implements OnItemListener, Contact.IV
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
+        swipeRefreshLayout.setColorSchemeResources(R.color.purple_700, R.color.custom);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        //swipeRefreshLayout.setRefreshing(true);
+
         recyclerViewPost = view.findViewById(R.id.rvPost);
-
-
         recyclerViewPost.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         //   layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -85,24 +93,23 @@ public class PostFragment extends Fragment implements OnItemListener, Contact.IV
 
     @Override
     public void itemClick(Post post) {
-
         DetailPostFragment detailPostFragment = new DetailPostFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("post", post);
         detailPostFragment.setArguments(bundle);
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, detailPostFragment, detailPostFragment.getClass().getSimpleName())
+                .replace(R.id.fragment_container, detailPostFragment, detailPostFragment.getClass().getSimpleName())
                 .addToBackStack(null)
                 .commit();
     }
 
     @Override
     public void showLoading() {
-       progress = new ProgressDialog(getContext());
-       progress.setMessage("Please wait...");
-       progress.setCancelable(true);
-       progress.show();
+        progress = new ProgressDialog(getContext());
+        progress.setMessage("Please wait...");
+        progress.setCancelable(true);
+        progress.show();
     }
 
     @Override
@@ -117,8 +124,8 @@ public class PostFragment extends Fragment implements OnItemListener, Contact.IV
 
     @Override
     public void showListData(List<Post> list) {
-            postLists.addAll(list);
-            adapter.notifyDataSetChanged();
+        postLists.addAll(list);
+        adapter.notifyDataSetChanged();
     }
 
     public void customDialog() {
@@ -138,5 +145,16 @@ public class PostFragment extends Fragment implements OnItemListener, Contact.IV
                     }
                 });
         builder.show();
+    }
+
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                presenter.getData();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }, 1000);
     }
 }
