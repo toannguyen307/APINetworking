@@ -20,25 +20,22 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.example.showcase.Contact;
+import com.example.showcase.Contract;
 import com.example.showcase.R;
 import com.example.showcase.adapter.OnItemListener;
 import com.example.showcase.adapter.PostAdapter;
 import com.example.showcase.model.Post;
-import com.example.showcase.presenter.Presenter;
-import com.example.showcase.view.DetailPostFragment;
+import com.example.showcase.presenter.PostPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostFragment extends Fragment implements OnItemListener, Contact.IView, SwipeRefreshLayout.OnRefreshListener {
+public class PostFragment extends Fragment implements OnItemListener, Contract.IView, SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView recyclerViewPost;
     private List<Post> postLists = new ArrayList<>();
-    private Presenter presenter;
+    private PostPresenter postPresenter;
     private PostAdapter adapter;
     private ProgressDialog progress;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -46,8 +43,8 @@ public class PostFragment extends Fragment implements OnItemListener, Contact.IV
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (presenter == null) {
-            presenter = new Presenter(this);
+        if (postPresenter == null) {
+            postPresenter = new PostPresenter(this);
         }
     }
 
@@ -88,7 +85,7 @@ public class PostFragment extends Fragment implements OnItemListener, Contact.IV
     @Override
     public void onStart() {
         super.onStart();
-        presenter.getData();
+        postPresenter.getData();
     }
 
     @Override
@@ -99,7 +96,7 @@ public class PostFragment extends Fragment implements OnItemListener, Contact.IV
         detailPostFragment.setArguments(bundle);
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, detailPostFragment, detailPostFragment.getClass().getSimpleName())
+                .replace(R.id.fragment_container, detailPostFragment, DetailPostFragment.class.getSimpleName())
                 .addToBackStack(null)
                 .commit();
     }
@@ -119,7 +116,10 @@ public class PostFragment extends Fragment implements OnItemListener, Contact.IV
 
     @Override
     public void showHideLoading() {
-        progress.dismiss();
+        swipeRefreshLayout.setRefreshing(false);
+        if(progress.isShowing()) {
+            progress.dismiss();
+        }
     }
 
     @Override
@@ -152,8 +152,7 @@ public class PostFragment extends Fragment implements OnItemListener, Contact.IV
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                presenter.getData();
-                swipeRefreshLayout.setRefreshing(false);
+                postPresenter.getData();
             }
         }, 1000);
     }

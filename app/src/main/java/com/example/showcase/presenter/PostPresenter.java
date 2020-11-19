@@ -1,7 +1,7 @@
 package com.example.showcase.presenter;
 
 
-import com.example.showcase.Contact;
+import com.example.showcase.Contract;
 import com.example.showcase.retrofit.APIManager;
 import com.example.showcase.model.Post;
 import com.example.showcase.retrofit.RequestAPI;
@@ -12,11 +12,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Presenter implements Contact.IPresenter {
+public class PostPresenter implements Contract.IPresenter {
 
-    private Contact.IView iView;
+    private Contract.IView iView;
 
-    public Presenter(Contact.IView iView) {
+    public PostPresenter(Contract.IView iView) {
         this.iView = iView;
     }
 
