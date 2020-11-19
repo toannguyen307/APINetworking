@@ -4,7 +4,7 @@ import com.example.showcase.model.Post;
 
 import java.util.List;
 
-public interface Contact {
+public interface Contract {
     interface IPresenter{
         void getData();
     }
